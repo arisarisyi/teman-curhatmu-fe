@@ -1,0 +1,18 @@
+<om-aurora>
+  <body>
+    <div class="container">
+      <div class="chatbox">
+        <div class="devil-icon">😈</div>
+        <h2>Galau? Lemah</h2>
+        <h2>Curhatlah kepaku agar lebih sakit!</h2>
+        @if (switchTombol) {
+        <p>Please log in first</p>
+        <app-login (isRegister)="switchForm()" />
+        }@else {
+        <p>Register</p>
+        <app-register (isLogin)="switchForm()" />
+        }
+      </div>
+    </div>
+  </body>
+</om-aurora>

@@ -1,0 +1,27 @@
+.view.conversation-view {
+  /* display: none; */
+  overflow-y: auto;
+  height: 100%;
+}
+
+.message {
+  display: flex;
+  gap: 20px;
+  padding: 25px 60px 15px 60px;
+  border-bottom: 1px solid #292d32;
+  font-size: 0.95em;
+}
+
+.message .content {
+  padding-top: 5px;
+}
+
+.user.message {
+  color: aliceblue;
+  justify-content: end;
+}
+
+.assistant.message {
+  background: #e1e6ed;
+  color: #3f4042;
+}

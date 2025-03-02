@@ -1,0 +1,18 @@
+<div id="message-form">
+  <div class="message-wrapper">
+    <textarea
+      id="message"
+      #message
+      rows="1"
+      placeholder="Send a message"
+      (keyup)="resizeTextarea($event)"
+    ></textarea>
+    <button class="send-button" (click)="sendMessage()">
+      <fa-icon [icon]="faPaperPlane"></fa-icon>
+    </button>
+  </div>
+  <div class="disclaimer">
+    Ini adalah robot sarkastik dibuat oleh
+    <a href="https://alarisyi.web.id">Imam Al Arisyi</a>
+  </div>
+</div>

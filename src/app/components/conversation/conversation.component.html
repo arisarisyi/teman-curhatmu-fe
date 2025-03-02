@@ -1,0 +1,20 @@
+<div
+  #scrollContainer
+  class="view conversation-view"
+  (scroll)="onScroll($event)"
+>
+  @for (message of messages(); track message._id) {
+  <div class="message {{ message.sender === 'user' ? 'user' : 'assistant' }}">
+    <div class="identity">
+      @if (message.sender === 'user') {
+      <fa-icon [icon]="faUserTie" style="margin-right: 7px"></fa-icon>
+      } @else {
+      <fa-icon [icon]="faFaceSmile" style="margin-right: 7px"></fa-icon>
+      }
+    </div>
+    <div class="content">
+      <p>{{ message.message }}</p>
+    </div>
+  </div>
+  }
+</div>

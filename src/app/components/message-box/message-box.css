@@ -1,0 +1,67 @@
+#message-form {
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 850px;
+  text-align: center;
+  padding: 0px 45px 0 45px;
+  box-shadow: var(--color-main) 0 0 50px;
+  margin-bottom: 30px;
+}
+
+.message-wrapper {
+  position: relative;
+}
+
+#message::placeholder {
+  color: var(--color-groupings);
+}
+
+#message {
+  background: var(--color-user-menu-hover);
+  border-radius: 13px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--color-user-message-border);
+  resize: none;
+  padding: 17px 85px 17px 15px;
+  font-family: inherit;
+  font-size: 1em;
+  color: var(--color-white);
+  box-shadow: rgba(0, 0, 0, 0.2) 0 0 45px;
+  outline: none;
+  background: aliceblue;
+}
+
+.disclaimer {
+  margin-top: 12px;
+  color: var(--color-disclaimer);
+  font-size: 0.7em;
+  color: #fff;
+}
+
+.send-button {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-gpt3);
+  border-radius: 5px;
+  display: inline-block;
+  font-size: 1em;
+  padding: 7px 9px 7px 7px;
+  color: rgb(3, 82, 111);
+  border: none;
+  margin-top: -2px;
+  cursor: pointer;
+}
+
+button.send-button:hover {
+  border: none;
+  background: rebeccapurple;
+  color: white;
+}
+
+a {
+  color: aliceblue;
+}
