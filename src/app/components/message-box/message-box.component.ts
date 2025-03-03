@@ -71,6 +71,7 @@ export class MessageBoxComponent {
             this.router.navigate(['/chat', newTopicId]);
           }
 
+          this.chatService.fetchConversations().subscribe();
           // Opsional: reset textarea setelah berhasil mengirim pesan
           this.messageTextarea.nativeElement.value = '';
         },

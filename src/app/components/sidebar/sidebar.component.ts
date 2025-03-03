@@ -8,6 +8,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { ChatService, Conversation } from '../../services/chat.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -36,7 +38,7 @@ import { Router } from '@angular/router';
             </button>
             <div class="edit-buttons">
               <button>E</button>
-              <button>X</button>
+              <button (click)="onDelete(conversation._id)">X</button>
             </div>
           </li>
 
@@ -245,48 +247,77 @@ export class SidebarComponent implements OnInit {
   faMessage = faMessage;
   groupedConversations: any[] = [];
   isSidebarHidden = false;
+  private convoSub!: Subscription;
 
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
-    private router: Router
+    private router: Router,
+    private chatService: ChatService
   ) {}
 
   ngOnInit(): void {
-    this.fetchConversations();
+    // Subscribe ke observable percakapan agar Sidebar ter-update secara dinamis
+    this.convoSub = this.chatService.conversations$.subscribe(
+      (convos: Conversation[]) => {
+        this.groupedConversations = this.groupConversations(convos);
+      }
+    );
+    // Panggil fetchConversations() saat inisialisasi
+    this.chatService.fetchConversations().subscribe();
+  }
+
+  ngOnDestroy(): void {
+    if (this.convoSub) {
+      this.convoSub.unsubscribe();
+    }
   }
 
   newChatOnClick() {
+    // Navigasi ke root untuk membuat percakapan baru
     this.router.navigate(['/']);
   }
 
-  private fetchConversations(): void {
-    const accessToken = this.cookieService.get('access_token');
-    this.http
-      .get<any>(
-        'http://localhost:3000/chat/topic?sortBy=createdAt&sortOrder=asc',
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
-      .subscribe({
-        next: (response) => {
-          if (response.status) {
-            this.groupedConversations = this.groupConversations(
-              response.data.data
-            );
-          }
-        },
-        error: (error) => {
-          console.error('Error fetching conversations:', error);
-        },
-      });
+  // private fetchConversations(): void {
+  //   const accessToken = this.cookieService.get('access_token');
+  //   this.http
+  //     .get<any>(
+  //       'http://localhost:3000/chat/topic?limit=50&sortBy=createdAt&sortOrder=desc',
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     )
+  //     .subscribe({
+  //       next: (response) => {
+  //         if (response.status) {
+  //           this.groupedConversations = this.groupConversations(
+  //             response.data.data
+  //           );
+  //         }
+  //       },
+  //       error: (error) => {
+  //         console.error('Error fetching conversations:', error);
+  //       },
+  //     });
+  // }
+
+  onDelete(topicId: string) {
+    // Panggil API delete melalui ChatService
+    this.chatService.deleteConversation(topicId).subscribe({
+      next: () => {
+        console.log('Conversation deleted successfully');
+        // Sidebar akan ter-update secara otomatis karena BehaviorSubject diperbarui
+      },
+      error: (err) => {
+        console.error('Error deleting conversation:', err);
+      },
+    });
   }
 
-  private groupConversations(conversations: any[]): any[] {
-    const groups = new Map<string, any[]>();
+  private groupConversations(conversations: Conversation[]): any[] {
+    const groups = new Map<string, Conversation[]>();
 
     conversations.forEach((convo) => {
       const groupName = this.getGroupName(convo.createdAt);

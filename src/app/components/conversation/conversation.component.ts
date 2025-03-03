@@ -6,7 +6,6 @@ import {
   signal,
   WritableSignal,
   effect,
-  AfterContentInit,
 } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faFaceSmile, faUserTie } from '@fortawesome/free-solid-svg-icons';
@@ -91,9 +90,18 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
     // Subscribe untuk menerima pesan baru dari ChatService
     this.newMessageSub = this.chatService.newMessage$.subscribe((message) => {
+      console.log(message);
+
       if (message) {
-        this.messages.update((old) => [...old, message]);
-        this.scrollToBottom();
+        const exists = this.messages().some(
+          (m) =>
+            m._id === message._id ||
+            (m.sender === message.sender && m.message === message.message)
+        );
+        if (!exists) {
+          this.messages.update((old) => [...old, message]);
+          this.scrollToBottom();
+        }
       }
     });
   }
@@ -126,11 +134,20 @@ export class ConversationComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           console.log(response);
-
-          const newMessages = response.data.data; // Ambil array sebenarnya
+          const newMessages = response.data.data; // Array pesan dari API
           console.log('Messages from API:', newMessages);
 
-          this.messages.update((old) => [...newMessages, ...old]);
+          // Filter pesan baru yang belum ada (cek berdasarkan sender dan message)
+          const dedupedMessages = newMessages.filter((apiMsg) => {
+            return !this.messages().some(
+              (existingMsg) =>
+                existingMsg.sender === apiMsg.sender &&
+                existingMsg.message === apiMsg.message
+            );
+          });
+
+          // Gabungkan pesan baru yang sudah didedup dengan pesan yang sudah ada
+          this.messages.update((old) => [...dedupedMessages, ...old]);
 
           this.hasMore.set(
             response.data.meta.page < response.data.meta.totalPages
@@ -138,6 +155,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
           this.isLoading.set(false);
           this.currentPage.update((p) => p + 1);
         },
+
         error: () => this.isLoading.set(false),
       });
   }
