@@ -28,9 +28,6 @@ export class WelcomeScreenComponent implements OnInit {
     console.log(this.getAccessToken(), 'oooo');
     this.http
       .get<any>(`${this.baseUrl}/auth/self`, {
-        headers: {
-          Authorization: `Bearer ${this.getAccessToken()}`,
-        },
         withCredentials: true,
       })
       .subscribe({
