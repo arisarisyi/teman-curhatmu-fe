@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private API_URL = 'http://localhost:3000/auth';
-
+  private API_URL = environment.baseUrl + '/auth';
   // Signal untuk menyimpan status autentikasi
   isAuthenticated = signal(false);
 

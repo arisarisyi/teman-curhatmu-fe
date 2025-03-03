@@ -5,8 +5,6 @@ import {
   faMessage,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { HttpClient } from '@angular/common/http';
-import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ChatService, Conversation } from '../../services/chat.service';
@@ -249,12 +247,7 @@ export class SidebarComponent implements OnInit {
   isSidebarHidden = false;
   private convoSub!: Subscription;
 
-  constructor(
-    private http: HttpClient,
-    private cookieService: CookieService,
-    private router: Router,
-    private chatService: ChatService
-  ) {}
+  constructor(private router: Router, private chatService: ChatService) {}
 
   ngOnInit(): void {
     // Subscribe ke observable percakapan agar Sidebar ter-update secara dinamis
@@ -265,6 +258,9 @@ export class SidebarComponent implements OnInit {
     );
     // Panggil fetchConversations() saat inisialisasi
     this.chatService.fetchConversations().subscribe();
+    if (window.innerWidth < 768) {
+      this.isSidebarHidden = true;
+    }
   }
 
   ngOnDestroy(): void {
@@ -277,31 +273,6 @@ export class SidebarComponent implements OnInit {
     // Navigasi ke root untuk membuat percakapan baru
     this.router.navigate(['/']);
   }
-
-  // private fetchConversations(): void {
-  //   const accessToken = this.cookieService.get('access_token');
-  //   this.http
-  //     .get<any>(
-  //       'http://localhost:3000/chat/topic?limit=50&sortBy=createdAt&sortOrder=desc',
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${accessToken}`,
-  //         },
-  //       }
-  //     )
-  //     .subscribe({
-  //       next: (response) => {
-  //         if (response.status) {
-  //           this.groupedConversations = this.groupConversations(
-  //             response.data.data
-  //           );
-  //         }
-  //       },
-  //       error: (error) => {
-  //         console.error('Error fetching conversations:', error);
-  //       },
-  //     });
-  // }
 
   onDelete(topicId: string) {
     // Panggil API delete melalui ChatService

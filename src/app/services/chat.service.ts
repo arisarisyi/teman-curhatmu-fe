@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface ChatMessage {
   _id: string;
@@ -23,7 +24,7 @@ export interface Conversation {
   providedIn: 'root',
 })
 export class ChatService {
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = environment.baseUrl;
 
   // Subject untuk pesan baru
   private newMessageSubject = new BehaviorSubject<ChatMessage | null>(null);
@@ -52,7 +53,7 @@ export class ChatService {
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
-    const url = `${this.baseUrl}/chat/topic?sortBy=createdAt&sortOrder=desc`;
+    const url = `${this.baseUrl}/chat/topic?limit=50&sortBy=createdAt&sortOrder=desc`;
     return this.http.get<any>(url, { headers }).pipe(
       tap((response) => {
         if (response.status) {

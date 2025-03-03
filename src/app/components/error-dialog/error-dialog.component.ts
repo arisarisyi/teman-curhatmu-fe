@@ -8,7 +8,6 @@ import {
 
 @Component({
   selector: 'app-error-dialog',
-  standalone: true,
   imports: [CommonModule, MatDialogModule],
   template: `
     <h2 mat-dialog-title>Error</h2>

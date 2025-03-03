@@ -15,6 +15,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { io, Socket } from 'socket.io-client';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 interface ApiResponse {
   data: {
@@ -47,7 +48,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   isLoading: WritableSignal<boolean> = signal(false);
   currentPage = signal(1);
   hasMore = signal(true);
-
+  baseUrl = environment.baseUrl;
   // WebSocket
   private socket!: Socket;
 
@@ -123,7 +124,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
     this.http
       .get<ApiResponse>(
-        `http://localhost:3000/chatbot/chat-history?topicId=${this.uuid}`,
+        `${this.baseUrl}/chatbot/chat-history?topicId=${this.uuid}`,
         {
           params,
           headers: {
@@ -164,7 +165,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     const token = this.getAccessToken();
 
     // Sesuaikan dengan namespace di NestJS
-    this.socket = io('http://localhost:3000/chat', {
+    this.socket = io(`${this.baseUrl}/chat`, {
       query: {
         topicId: this.uuid,
         token: token,

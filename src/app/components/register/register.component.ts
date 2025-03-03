@@ -2,6 +2,12 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  DialogData,
+  RegisterDialogComponent,
+} from '../register-dialog/register-dialog.component';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-register',
@@ -120,12 +126,15 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 export class RegisterComponent {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
+  private dialog = inject(MatDialog);
 
   registerForm = this.fb.group({
     username: ['', Validators.required],
     email: ['', Validators.required],
     password: ['', Validators.required],
   });
+
+  baseUrl = environment.baseUrl;
 
   isLoading = false;
   errorMessage = '';
@@ -139,18 +148,40 @@ export class RegisterComponent {
     this.errorMessage = '';
 
     this.http
-      .post('http://localhost:3000/auth/register', this.registerForm.value)
+      .post(`${this.baseUrl}/auth/register`, this.registerForm.value)
       .subscribe({
         next: (response) => {
           console.log('Register successful', response);
           this.isLoading = false;
+          this.openDialog(
+            'Register Successful',
+            'Your account has been created successfully.',
+            true
+          );
         },
         error: (err) => {
           console.log(err);
 
           this.errorMessage = err.error.message || 'Register failed';
           this.isLoading = false;
+          // Buka dialog error dengan pesan dari response
+          const errorMsg = err.error.message || 'Register failed';
+          this.openDialog('Register Failed', errorMsg, false);
         },
       });
+  }
+
+  openDialog(title: string, message: string, success: boolean): void {
+    const dialogRef = this.dialog.open(RegisterDialogComponent, {
+      width: '300px',
+      data: { title, message, success } as DialogData,
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      // Jika sukses, trigger event isLogin untuk pindah ke login component
+      if (success) {
+        this.isLogin.emit();
+      }
+    });
   }
 }

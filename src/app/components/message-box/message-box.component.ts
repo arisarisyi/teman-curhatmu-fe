@@ -5,6 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { CookieService } from 'ngx-cookie-service';
 import { ChatMessage, ChatService } from '../../services/chat.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-message-box',
@@ -16,6 +17,8 @@ export class MessageBoxComponent {
   @ViewChild('message') messageTextarea!: ElementRef<HTMLTextAreaElement>;
   faPaperPlane = faPaperPlane;
   private cookieService = inject(CookieService);
+
+  baseUrl = environment.baseUrl;
 
   constructor(
     private http: HttpClient,
@@ -57,7 +60,7 @@ export class MessageBoxComponent {
     };
 
     this.http
-      .post<any>('http://localhost:3000/chatbot', payload, {
+      .post<any>(`${this.baseUrl}/chatbot`, payload, {
         headers: {
           Authorization: `Bearer ${this.getAccessToken()}`,
         },
