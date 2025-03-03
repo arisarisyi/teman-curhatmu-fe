@@ -48,13 +48,8 @@ export class ChatService {
   }
 
   fetchConversations() {
-    const token = this.getAccessToken();
-    let headers = new HttpHeaders();
-    if (token) {
-      headers = headers.set('Authorization', `Bearer ${token}`);
-    }
     const url = `${this.baseUrl}/chat/topic?limit=50&sortBy=createdAt&sortOrder=desc`;
-    return this.http.get<any>(url, { headers }).pipe(
+    return this.http.get<any>(url, { withCredentials: true }).pipe(
       tap((response) => {
         if (response.status) {
           // Update BehaviorSubject dengan data percakapan terbaru
@@ -65,13 +60,8 @@ export class ChatService {
   }
 
   deleteConversation(topicId: string) {
-    const token = this.getAccessToken();
-    let headers = new HttpHeaders();
-    if (token) {
-      headers = headers.set('Authorization', `Bearer ${token}`);
-    }
     const url = `${this.baseUrl}/chat/${topicId}`;
-    return this.http.delete<any>(url, { headers }).pipe(
+    return this.http.delete<any>(url, { withCredentials: true }).pipe(
       tap((response) => {
         if (response.status) {
           // Hapus percakapan dari BehaviorSubject

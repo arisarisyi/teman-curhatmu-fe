@@ -61,9 +61,7 @@ export class MessageBoxComponent {
 
     this.http
       .post<any>(`${this.baseUrl}/chatbot`, payload, {
-        headers: {
-          Authorization: `Bearer ${this.getAccessToken()}`,
-        },
+        withCredentials: true,
       })
       .subscribe({
         next: (response) => {

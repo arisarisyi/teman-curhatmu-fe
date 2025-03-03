@@ -25,7 +25,6 @@ export class WelcomeScreenComponent implements OnInit {
   username = '';
 
   private getUsername() {
-    console.log(this.getAccessToken(), 'oooo');
     this.http
       .get<any>(`${this.baseUrl}/auth/self`, {
         withCredentials: true,

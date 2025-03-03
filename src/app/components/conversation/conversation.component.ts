@@ -127,9 +127,6 @@ export class ConversationComponent implements OnInit, OnDestroy {
         `${this.baseUrl}/chatbot/chat-history?topicId=${this.uuid}`,
         {
           params,
-          headers: {
-            Authorization: `Bearer ${this.getAccessToken()}`,
-          },
           withCredentials: true,
         }
       )
