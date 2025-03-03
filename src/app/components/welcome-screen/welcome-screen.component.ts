@@ -31,9 +31,7 @@ export class WelcomeScreenComponent implements OnInit {
       })
       .subscribe({
         next: (response) => {
-          console.log(response.data);
           const newMessages = response.data; // Array pesan dari API
-          console.log('Messages from API:', newMessages);
           this.username = newMessages.username;
         },
       });

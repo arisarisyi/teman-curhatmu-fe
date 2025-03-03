@@ -91,8 +91,6 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
     // Subscribe untuk menerima pesan baru dari ChatService
     this.newMessageSub = this.chatService.newMessage$.subscribe((message) => {
-      console.log(message);
-
       if (message) {
         const exists = this.messages().some(
           (m) =>
@@ -132,9 +130,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (response) => {
-          console.log(response);
           const newMessages = response.data.data; // Array pesan dari API
-          console.log('Messages from API:', newMessages);
 
           // Filter pesan baru yang belum ada (cek berdasarkan sender dan message)
           const dedupedMessages = newMessages.filter((apiMsg) => {
@@ -160,8 +156,6 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   private initWebSocket() {
-    const token = this.getAccessToken();
-
     // Sesuaikan dengan namespace di NestJS
     this.socket = io(`${this.baseUrl}/chat`, {
       withCredentials: true,

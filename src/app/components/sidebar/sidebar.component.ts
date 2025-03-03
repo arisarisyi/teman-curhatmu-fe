@@ -277,10 +277,7 @@ export class SidebarComponent implements OnInit {
   onDelete(topicId: string) {
     // Panggil API delete melalui ChatService
     this.chatService.deleteConversation(topicId).subscribe({
-      next: () => {
-        console.log('Conversation deleted successfully');
-        // Sidebar akan ter-update secara otomatis karena BehaviorSubject diperbarui
-      },
+      next: () => {},
       error: (err) => {
         console.error('Error deleting conversation:', err);
       },

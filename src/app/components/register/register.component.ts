@@ -151,7 +151,6 @@ export class RegisterComponent {
       .post(`${this.baseUrl}/auth/register`, this.registerForm.value)
       .subscribe({
         next: (response) => {
-          console.log('Register successful', response);
           this.isLoading = false;
           this.openDialog(
             'Register Successful',
@@ -160,8 +159,6 @@ export class RegisterComponent {
           );
         },
         error: (err) => {
-          console.log(err);
-
           this.errorMessage = err.error.message || 'Register failed';
           this.isLoading = false;
           // Buka dialog error dengan pesan dari response
