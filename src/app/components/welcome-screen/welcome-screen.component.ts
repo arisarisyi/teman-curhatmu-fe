@@ -31,6 +31,7 @@ export class WelcomeScreenComponent implements OnInit {
         headers: {
           Authorization: `Bearer ${this.getAccessToken()}`,
         },
+        withCredentials: true,
       })
       .subscribe({
         next: (response) => {
