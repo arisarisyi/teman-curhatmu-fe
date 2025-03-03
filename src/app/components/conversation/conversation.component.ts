@@ -112,8 +112,6 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   private loadMessages() {
-    console.log(this.getAccessToken());
-
     if (!this.hasMore() || this.isLoading()) return;
 
     this.isLoading.set(true);
