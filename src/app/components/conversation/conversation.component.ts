@@ -130,6 +130,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
           headers: {
             Authorization: `Bearer ${this.getAccessToken()}`,
           },
+          withCredentials: true,
         }
       )
       .subscribe({
