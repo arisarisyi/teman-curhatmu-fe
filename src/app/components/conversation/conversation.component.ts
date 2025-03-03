@@ -164,13 +164,15 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
     // Sesuaikan dengan namespace di NestJS
     this.socket = io(`${this.baseUrl}/chat`, {
+      withCredentials: true, // Tambahkan agar browser mengirim cookie
       query: {
         topicId: this.uuid,
-        token: token,
+        // Jika token diperlukan secara eksplisit, pastikan hanya disertakan bila ada
+        ...(token ? { token } : {}),
       },
-      transports: ['websocket'], // Optional: force WebSocket transport
+      transports: ['websocket'],
       auth: {
-        token: token, // Alternatif jika ingin menggunakan auth
+        ...(token ? { token } : {}),
       },
     });
 
