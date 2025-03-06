@@ -7,7 +7,7 @@ import {
   DialogData,
   RegisterDialogComponent,
 } from '../register-dialog/register-dialog.component';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-register',
